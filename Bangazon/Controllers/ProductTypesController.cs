@@ -20,7 +20,7 @@ namespace Bangazon.Controllers
         }
 
         // GET: ProductTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Ptype)
         {
             return View(await _context.ProductType.ToListAsync());
         }
