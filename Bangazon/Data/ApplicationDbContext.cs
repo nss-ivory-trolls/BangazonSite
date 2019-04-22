@@ -59,7 +59,41 @@ namespace Bangazon.Data {
             };
             var passwordHash = new PasswordHasher<ApplicationUser> ();
             user.PasswordHash = passwordHash.HashPassword (user, "Admin8*");
-            modelBuilder.Entity<ApplicationUser> ().HasData (user);
+            
+
+            ApplicationUser user2 = new ApplicationUser
+            {
+                FirstName = "Jimbo",
+                LastName = "Gimbo",
+                StreetAddress = "231 Linkin St.",
+                UserName = "jim@bim.com",
+                NormalizedUserName = "JIM@BIM.COM",
+                Email = "jim@bim.com",
+                NormalizedEmail = "JIM@BIM.COM",
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+            var passwordHash2 = new PasswordHasher<ApplicationUser>();
+            user2.PasswordHash = passwordHash2.HashPassword(user2, "Jimbo5*");
+            
+
+            ApplicationUser user3 = new ApplicationUser
+            {
+                FirstName = "Julia",
+                LastName = "Gulia",
+                StreetAddress = "87 Jules St.",
+                UserName = "jul@gul.com",
+                NormalizedUserName = "JUL@GUL.COM",
+                Email = "jul@gul.com",
+                NormalizedEmail = "JUL@GUL.COM",
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString("D")
+            };
+            var passwordHash3 = new PasswordHasher<ApplicationUser>();
+            user3.PasswordHash = passwordHash3.HashPassword(user3, "Julia5*");
+            modelBuilder.Entity<ApplicationUser>().HasData(user, user2, user3);
 
             modelBuilder.Entity<PaymentType> ().HasData (
                 new PaymentType () {
@@ -73,6 +107,20 @@ namespace Bangazon.Data {
                         UserId = user.Id,
                         Description = "Discover",
                         AccountNumber = "4102948572991"
+                },
+                new PaymentType()
+                {
+                    PaymentTypeId = 3,
+                    UserId = user2.Id,
+                    Description = "BarClay",
+                    AccountNumber = "4198948572991"
+                },
+                new PaymentType()
+                {
+                    PaymentTypeId = 4,
+                    UserId = user3.Id,
+                    Description = "Fifth Third",
+                    AccountNumber = "2202948572991"
                 }
             );
 
@@ -84,6 +132,16 @@ namespace Bangazon.Data {
                 new ProductType () {
                     ProductTypeId = 2,
                         Label = "Appliances"
+                },
+                new ProductType()
+                {
+                    ProductTypeId = 3,
+                    Label = "Electronics"
+                },
+                new ProductType()
+                {
+                    ProductTypeId = 4,
+                    Label = "HomeGoods"
                 }
             );
 
@@ -105,6 +163,26 @@ namespace Bangazon.Data {
                         Title = "Wheelbarrow",
                         Quantity = 5,
                         Price = 29.99
+                },
+                new Product()
+                {
+                    ProductId = 3,
+                    ProductTypeId = 4,
+                    UserId = user3.Id,
+                    Description = "It's so bright",
+                    Title = "Lamp",
+                    Quantity = 5,
+                    Price = 299.99
+                },
+                new Product()
+                {
+                    ProductId = 4,
+                    ProductTypeId = 3,
+                    UserId = user.Id,
+                    Description = "It plays dope shiz",
+                    Title = "Gameboy",
+                    Quantity = 2,
+                    Price = 2999.99
                 }
             );
 
@@ -129,6 +207,15 @@ namespace Bangazon.Data {
                     OrderProductId = 2,
                     OrderId = 1,
                     ProductId = 2
+                }
+            );
+
+            modelBuilder.Entity<OrderProduct>().HasData(
+                new OrderProduct()
+                {
+                    OrderProductId = 3,
+                    OrderId = 1,
+                    ProductId = 4
                 }
             );
 
