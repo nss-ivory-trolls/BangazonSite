@@ -58,7 +58,17 @@ namespace Bangazon.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
+            List<SelectListItem> selectionList = _context.ProductType.Select(pt => new SelectListItem
+            {
+                Value = pt.ProductTypeId.ToString(),
+                Text = pt.Label
+            }).ToList();
+            selectionList.Insert(0, new SelectListItem
+            {
+                Value = null,
+                Text = "Select a Category..."
+            });
+            ViewData["ProductTypeId"] = new SelectList(selectionList, "Value", "Text", selectionList[0]);
             return View();
         }
 
@@ -78,7 +88,7 @@ namespace Bangazon.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", new { @id = product.ProductId });
             }
-            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label", product.ProductTypeId);
+            ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "Value", "Text", product.ProductTypeId);
             return View(product);
         }
 
