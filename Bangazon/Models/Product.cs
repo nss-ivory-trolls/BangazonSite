@@ -30,14 +30,12 @@ namespace Bangazon.Models
     [Required]
     public int Quantity { get; set; }
 
-    [Required]
     public string UserId {get; set;}
 
     public string City {get; set;}
 
     public string ImagePath {get; set;}
 
-    [Required]
     public ApplicationUser User { get; set; }
 
     [Required]
