@@ -79,7 +79,6 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,ProductTypeId")] Product product)
         {
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid) 
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);

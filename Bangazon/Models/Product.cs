@@ -29,7 +29,8 @@ namespace Bangazon.Models
 
     [Required]
     public int Quantity { get; set; }
-
+    
+    [Required]
     public string UserId {get; set;}
 
     public string City {get; set;}
@@ -37,7 +38,7 @@ namespace Bangazon.Models
     public string ImagePath {get; set;}
 
     public ApplicationUser User { get; set; }
-
+    
     [Required]
     [Display(Name="Product Category")]
     public int ProductTypeId { get; set; }
