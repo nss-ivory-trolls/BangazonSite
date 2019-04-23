@@ -21,7 +21,7 @@ namespace Bangazon.Controllers
         }
 
         // GET: ProductTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string Ptype)
         {
             var model = new ProductTypesViewModel();
 
