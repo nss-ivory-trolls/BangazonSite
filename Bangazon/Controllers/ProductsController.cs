@@ -23,14 +23,12 @@ namespace Bangazon.Controllers
             _context = context;
         }
 
-        // GET: Products
         public async Task<IActionResult> Index()
         {
             Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ApplicationUser> applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,7 +36,7 @@ namespace Bangazon.Controllers
                 return NotFound();
             }
 
-            Product product = await _context.Product
+            var product = await _context.Product
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
@@ -51,39 +49,12 @@ namespace Bangazon.Controllers
         }
 
 
-        //public async Task<IActionResult> Quant(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    Product product = await _context.Product
-        //        .Include(p => p.ProductType)
-        //        .Include(p => p.User)
-        //        .FirstOrDefaultAsync(m => m.ProductId == id);
-        //    if (product.ProductId == id)
-        //    {
-        //        product.Quantity = product.Quantity - 1;
-        //    }
-
-        //        if (product == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        return RedirectToAction(nameof(Index));
-        //    }
-                // GET: Products/Create
                 public IActionResult Create()
                 {
                     ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
                     ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
                     return View();
                 }
-        // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,ProductTypeId")] Product product)
@@ -99,7 +70,6 @@ namespace Bangazon.Controllers
             return View(product);
         }
 
-        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,9 +87,7 @@ namespace Bangazon.Controllers
             return View(product);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,DateCreated,Description,Title,Price,Quantity,UserId,City,ImagePath,ProductTypeId")] Product product)
@@ -154,7 +122,6 @@ namespace Bangazon.Controllers
             return View(product);
         }
 
-        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -174,7 +141,6 @@ namespace Bangazon.Controllers
             return View(product);
         }
 
-        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
