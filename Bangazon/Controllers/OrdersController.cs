@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Bangazon.Controllers
 {
@@ -15,20 +14,20 @@ namespace Bangazon.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public OrdersController(ApplicationDbContext ctx,
-            UserManager<ApplicationUser> userManager)
+        public OrdersController(ApplicationDbContext context)
         {
-            _userManager = userManager;
-            _context = ctx;
+            _context = context;
         }
 
         // GET: Orders
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Order.Include(o => o.PaymentType).Include(o => o.User);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = _context.Order
+                .Include(o => o.OrderProducts)
+                .ThenInclude(o => o.Product)
+                .Include(o => o.User);
+            var seeData = await applicationDbContext.ToListAsync();
+            return View(seeData);
         }
 
         // GET: Orders/Details/5
@@ -41,6 +40,8 @@ namespace Bangazon.Controllers
 
             var order = await _context.Order
                 .Include(o => o.PaymentType)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(o => o.Product)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
