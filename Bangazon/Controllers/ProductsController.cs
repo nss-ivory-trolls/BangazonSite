@@ -22,36 +22,8 @@ namespace Bangazon.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string ProductType)
         {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Products/SportingGoods
-        public async Task<IActionResult> SportingGoods()
-        {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User).Where(p => p.ProductTypeId.Equals(1));
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Products/Appliances
-        public async Task<IActionResult> Appliances()
-        {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User).Where(p => p.ProductTypeId.Equals(2));
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Products/Electronics
-        public async Task<IActionResult> Electronics()
-        {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User).Where(p => p.ProductTypeId.Equals(3));
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Products/HomeGoods
-        public async Task<IActionResult> HomeGoods()
-        {
-            var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User).Where(p => p.ProductTypeId.Equals(4));
-            return View(await applicationDbContext.ToListAsync());
+                var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
+                return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Products/Details/5
