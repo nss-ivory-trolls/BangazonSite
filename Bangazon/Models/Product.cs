@@ -21,7 +21,7 @@ namespace Bangazon.Models
 
     [Required]
     [StringLength(55, ErrorMessage="Please shorten the product title to 55 characters")]
-    [RegularExpression()]
+    [RegularExpression("[^!@#$%^&*()]", ErrorMessage = "Please do not use the following characters: !@#$%^&*()")]
     public string Title { get; set; }
 
     [Required]
