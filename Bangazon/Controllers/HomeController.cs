@@ -21,8 +21,10 @@ namespace Bangazon.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Product;
-            return View(await applicationDbContext.ToListAsync());
+            var list = (from p in _context.Product
+                        orderby p.DateCreated descending
+                        select p).Take(20);
+            return View(await list.ToListAsync());
         }
 
         public IActionResult Privacy()
