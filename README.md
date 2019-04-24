@@ -1,4 +1,4 @@
-# BangazonEcommerce
+# Bangazon E-commerce
 Welcome to **Bangazon E-commerce,** an online shopping marketplace for a fictitious company. This application enables users to create a profile, search and purchase products, and create and sell products of their own. Bangazon E-commerce is built with a C# /.NET MVC architecture, .NET Entity and Identity Framework for easing database access and login/registration, and Razor templates for the UI.
 
 ### Generating the Database
