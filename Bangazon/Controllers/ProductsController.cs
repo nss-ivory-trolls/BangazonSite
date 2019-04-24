@@ -8,6 +8,8 @@ using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Bangazon.Models.ProductViewModels;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Bangazon.Controllers
 
@@ -71,13 +73,6 @@ namespace Bangazon.Controllers
 
             return View(viewModel);
         }
-
-                public IActionResult Create()
-                {
-                    ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
-                    ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-                    return View();
-                }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateViewModel viewModel)
