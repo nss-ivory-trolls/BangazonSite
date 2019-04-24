@@ -40,7 +40,7 @@ namespace Bangazon.Controllers
                            select p;
             if (!string.IsNullOrEmpty(searchString))
             {
-                Product = _context.Product.Where(p => p.City.Contains(searchString));
+                Product = _context.Product.Where(p => p.Title.Contains(searchString));
             }
 
             return View(Product.ToList());
