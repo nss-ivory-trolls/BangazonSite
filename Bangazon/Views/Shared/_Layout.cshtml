@@ -33,10 +33,7 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Product Types</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -47,6 +44,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">View Cart</a>
                         </li>
+<<<<<<< HEAD
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index"> Products</a>
                         </li>
@@ -54,6 +52,8 @@
                              @using (Html.BeginForm()) {<p>@Html.TextBox("SearchString")
                     <input type="submit"value="Search"/></p>}
                         </li>
+=======
+>>>>>>> master
                     </ul>
                 </div>
             </div>

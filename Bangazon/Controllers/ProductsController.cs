@@ -80,7 +80,6 @@ namespace Bangazon.Controllers
 
             return View(viewModel);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateViewModel viewModel)

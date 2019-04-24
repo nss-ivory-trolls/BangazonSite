@@ -79,7 +79,11 @@
                     @Html.DisplayFor(modelItem => item.User.Id)
                 </td>
                 <td>
+<<<<<<< HEAD
                     @Html.DisplayFor(modelItem => item.ProductType.Label)
+=======
+                    @Html.ActionLink(item.ProductType.Label, "Details", "ProductTypes", new { id = item.ProductTypeId }, null)
+>>>>>>> master
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
