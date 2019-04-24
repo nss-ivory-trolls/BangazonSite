@@ -32,16 +32,22 @@ namespace Bangazon.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
-            public ViewResult Index( string searchString)
+        //public async Task<IActionResult> Index(string ProductType)
+        //{
+        //    var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
+        //    return View(await applicationDbContext.ToListAsync());
+        //}
+
+        public async Task<ViewResult> Index( string searchString , string ProductType)
         {
-            var Product = from p in _context.Product
-                           select p;
+            var Product = from p in _context.Product.Include(p => p.ProductType).Include(p => p.User)
+            select p;
             if (!string.IsNullOrEmpty(searchString))
             {
                 Product = _context.Product.Where(p => p.Title.Contains(searchString));
             }
+         return View(await Product.ToListAsync());
 
-            return View(Product.ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
