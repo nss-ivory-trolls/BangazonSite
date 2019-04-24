@@ -8,6 +8,8 @@ using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Bangazon.Models.ProductViewModels;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Bangazon.Controllers
 
@@ -31,10 +33,10 @@ namespace Bangazon.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string ProductType)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ApplicationUser> applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
+                var applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
+                return View(await applicationDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -71,13 +73,6 @@ namespace Bangazon.Controllers
 
             return View(viewModel);
         }
-
-                public IActionResult Create()
-                {
-                    ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
-                    ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-                    return View();
-                }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateViewModel viewModel)
