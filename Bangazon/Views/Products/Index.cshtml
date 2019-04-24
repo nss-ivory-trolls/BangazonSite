@@ -9,14 +9,6 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-@using (Html.BeginForm())
-{
-    <p>
-        Find Product by Title: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
-}
 <table class="table">
     <thead>
         <tr>
@@ -79,11 +71,8 @@
                     @Html.DisplayFor(modelItem => item.User.Id)
                 </td>
                 <td>
-<<<<<<< HEAD
                     @Html.DisplayFor(modelItem => item.ProductType.Label)
-=======
-                    @Html.ActionLink(item.ProductType.Label, "Details", "ProductTypes", new { id = item.ProductTypeId }, null)
->>>>>>> master
+                    @*@Html.ActionLink(item.ProductType.Label, "Details", "ProductTypes", new { id = item.ProductTypeId }, null)*@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
