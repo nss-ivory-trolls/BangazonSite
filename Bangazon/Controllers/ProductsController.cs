@@ -11,9 +11,6 @@ using Bangazon.Models.ProductViewModels;
 
 namespace Bangazon.Controllers
 
-
-
-
 {
     public class ProductsController : Controller
     {
