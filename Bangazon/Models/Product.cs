@@ -17,6 +17,7 @@ namespace Bangazon.Models
 
     [Required]
     [StringLength(255)]
+    [RegularExpression("[^!@#$%^&*()]", ErrorMessage = "Please do not use the following characters: !@#$%^&*()")]
     public string Description { get; set; }
 
     [Required]
@@ -26,6 +27,7 @@ namespace Bangazon.Models
 
     [Required]
     [DisplayFormat(DataFormatString = "{0:C}")]
+    [Range(0,10000)]
     public double Price { get; set; }
 
     [Required]
