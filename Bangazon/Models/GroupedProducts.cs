@@ -8,6 +8,6 @@ namespace Bangazon.Models
         public int TypeId { get; set; }
         public string TypeName { get; set; }
         public int ProductCount { get; set; }
-        public IEnumerable<Product> Products { get; set; }
+        public List<Product> Products { get; set; }
     }
 }
