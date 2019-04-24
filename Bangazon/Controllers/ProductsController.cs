@@ -7,6 +7,9 @@ using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Bangazon.Models.ProductViewModels;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace Bangazon.Controllers
 

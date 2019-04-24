@@ -11,7 +11,8 @@
 {
     <h4>
         <div>
-            @Html.DisplayFor(modelItem => item.TypeName)
+            @Html.ActionLink(item.TypeName, "Details", "ProductTypes", new { id = item.TypeId }, null)
+         
             (@Html.DisplayFor(modelItem => item.ProductCount))
         </div>
     </h4>
