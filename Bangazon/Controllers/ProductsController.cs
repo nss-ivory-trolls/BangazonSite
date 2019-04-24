@@ -8,6 +8,9 @@ using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Bangazon.Models.ProductViewModels;
+using System.Threading.Tasks;
+using System.Linq;
+using System;
 
 namespace Bangazon.Controllers
 
@@ -31,10 +34,16 @@ namespace Bangazon.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
-        public async Task<IActionResult> Index()
+            public ViewResult Index( string searchString)
         {
-            Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ApplicationUser> applicationDbContext = _context.Product.Include(p => p.ProductType).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
+            var Product = from p in _context.Product
+                           select p;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                Product = _context.Product.Where(p => p.City.Contains(searchString));
+            }
+
+            return View(Product.ToList());
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -72,12 +81,6 @@ namespace Bangazon.Controllers
             return View(viewModel);
         }
 
-                public IActionResult Create()
-                {
-                    ViewData["ProductTypeId"] = new SelectList(_context.ProductType, "ProductTypeId", "Label");
-                    ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-                    return View();
-                }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateViewModel viewModel)
@@ -85,7 +88,7 @@ namespace Bangazon.Controllers
             // Remove the user from the model validation because it is
             // not information posted in the form
             ModelState.Remove("product.UserId");
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
                 viewModel.Product.UserId = user.Id;
