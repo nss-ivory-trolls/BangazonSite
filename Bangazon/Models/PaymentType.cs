@@ -21,14 +21,15 @@ namespace Bangazon.Models
     public string Description { get; set; }
 
     [Required]
-    [StringLength(20)]
-    [Display(Name = "Account Number")]
+
+   [StringLength(20, MinimumLength = 4, ErrorMessage = "Account number should be between 2-20 characters.")]
+   [Display(Name = "Account Number")]
     public string AccountNumber { get; set; }
 
     [Display(Name = "Payment Method")]
     public string PaymentMethod
     {
-        get { return $"{Description} *{AccountNumber.Substring(AccountNumber.Length - 4)}"; }
+        get { return $"{Description} *{AccountNumber.Substring(AccountNumber.Length)}"; }
     }
 
     [Required]
