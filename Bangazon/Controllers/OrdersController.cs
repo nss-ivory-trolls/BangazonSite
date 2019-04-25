@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bangazon.Controllers
 {
@@ -108,6 +110,8 @@ namespace Bangazon.Controllers
             return View(order);
         }
 
+      
+
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -176,6 +180,46 @@ namespace Bangazon.Controllers
             return View(order);
         }
 
+        public async Task<IActionResult> RemoveProductFromOrder(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.OrderProduct
+                .Include(o => o.Product)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        [HttpPost, ActionName("RemoveProductFromOrder")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProductConfirmed(int id)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            var orderProducts = _context.OrderProduct;
+            foreach (OrderProduct item in orderProducts)
+            {
+                if (item.ProductId == id)
+                {
+                    orderProducts.Remove(item);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Cart));
+        }
+
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -186,6 +230,8 @@ namespace Bangazon.Controllers
 
             var order = await _context.Order
                 .Include(o => o.PaymentType)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(o => o.Product)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
@@ -201,10 +247,62 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userid = user.Id;
             var order = await _context.Order.FindAsync(id);
+            var orderProducts = _context.OrderProduct;
+            foreach (OrderProduct item in orderProducts)
+            {
+                if (item.OrderId == order.OrderId && userid == order.UserId)
+                {
+                    orderProducts.Remove(item);
+                }
+            }
+
+            if (userid == order.UserId)
+            {
             _context.Order.Remove(order);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AddToCart([FromRoute] int id)
+        {
+            Product productToAdd = await _context.Product.SingleOrDefaultAsync(p => p.ProductId == id);
+
+            var user = await GetCurrentUserAsync();
+
+            var openOrder = await _context.Order.SingleOrDefaultAsync(o => o.User == user && o.PaymentTypeId == null);
+
+            if (openOrder == null)
+            {
+                var order = new Order();
+                order.UserId = user.Id;
+                order.DateCreated = DateTime.UtcNow;
+                _context.Add(order);
+
+                var orderProduct = new OrderProduct();
+                orderProduct.ProductId = productToAdd.ProductId;
+                orderProduct.OrderId = order.OrderId;
+                _context.Add(orderProduct);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var orderProduct = new OrderProduct();
+                orderProduct.ProductId = productToAdd.ProductId;
+                orderProduct.OrderId = openOrder.OrderId;
+                _context.Add(orderProduct);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Cart));
         }
 
         private bool OrderExists(int id)
