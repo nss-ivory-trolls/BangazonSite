@@ -262,12 +262,16 @@ namespace Bangazon.Controllers
             var userid = user.Id;
             var order = await _context.Order.FindAsync(id);
             var orderProducts = _context.OrderProduct;
+            var products = _context.Product;
+
+           
+
             foreach (OrderProduct item in orderProducts)
             {
                 if (item.OrderId == order.OrderId && userid == order.UserId)
                 {
                     orderProducts.Remove(item);
-                }
+                };
             }
 
             if (userid == order.UserId)
