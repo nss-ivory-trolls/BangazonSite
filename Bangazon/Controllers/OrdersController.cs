@@ -9,6 +9,7 @@ using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bangazon.Controllers
 {
@@ -268,6 +269,40 @@ namespace Bangazon.Controllers
             }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AddToCart([FromRoute] int id)
+        {
+            Product productToAdd = await _context.Product.SingleOrDefaultAsync(p => p.ProductId == id);
+
+            var user = await GetCurrentUserAsync();
+
+            var openOrder = await _context.Order.SingleOrDefaultAsync(o => o.User == user && o.PaymentTypeId == null);
+
+            if (openOrder == null)
+            {
+                var order = new Order();
+                order.UserId = user.Id;
+                order.DateCreated = DateTime.UtcNow;
+                _context.Add(order);
+
+                var orderProduct = new OrderProduct();
+                orderProduct.ProductId = productToAdd.ProductId;
+                orderProduct.OrderId = order.OrderId;
+                _context.Add(orderProduct);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                var orderProduct = new OrderProduct();
+                orderProduct.ProductId = productToAdd.ProductId;
+                orderProduct.OrderId = openOrder.OrderId;
+                _context.Add(orderProduct);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Cart));
         }
 
         private bool OrderExists(int id)

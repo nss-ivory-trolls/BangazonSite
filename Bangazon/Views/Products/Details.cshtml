@@ -53,9 +53,14 @@
         </dd>*@
     </dl>
 </div>
-<div class="form-group">
-    <input type="submit" value="Add To Order" class="btn btn-primary" />
+<div>
+    <form asp-controller="Orders" asp-action="AddToCart" asp-route-id="@Model.ProductId">
+        <input type="submit" value="Add to Order" class="btn btn-primary" /> &nbsp; <a asp-action="Edit" asp-route-id="@Model.ProductId">Update</a>
+    </form>
 </div>
+@*<div class="form-group">
+    <input type="submit" value="Add To Order" class="btn btn-primary" />
+</div>*@
 <hr/>
 <div>
     @*<a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |*@
