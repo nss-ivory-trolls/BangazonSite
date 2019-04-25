@@ -217,6 +217,13 @@ namespace Bangazon.Controllers
                 }
             }
             await _context.SaveChangesAsync();
+
+            var restockProduct = await _context.Product
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            restockProduct.Quantity = restockProduct.Quantity + 1;
+            _context.Update(restockProduct);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Cart));
         }
 
@@ -293,10 +300,10 @@ namespace Bangazon.Controllers
                 _context.Add(orderProduct);
                 await _context.SaveChangesAsync();
 
-                //var reduceProduct = await _context.Product
-                //    .FirstOrDefaultAsync(m => m.ProductId == id);
-                //reduceProduct.Quantity = reduceProduct.Quantity - 1;
-                //_context.Update(reduceProduct);
+                var reduceProduct = await _context.Product
+                    .FirstOrDefaultAsync(m => m.ProductId == id);
+                reduceProduct.Quantity = reduceProduct.Quantity - 1;
+                _context.Update(reduceProduct);
             }
             else
             {
