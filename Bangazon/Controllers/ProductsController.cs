@@ -13,9 +13,6 @@ using System.Linq;
 
 namespace Bangazon.Controllers
 
-
-
-
 {
     public class ProductsController : Controller
     {
@@ -94,7 +91,7 @@ namespace Bangazon.Controllers
             // Remove the user from the model validation because it is
             // not information posted in the form
             ModelState.Remove("product.UserId");
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
                 viewModel.Product.UserId = user.Id;
@@ -121,7 +118,6 @@ namespace Bangazon.Controllers
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", product.UserId);
             return View(product);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
