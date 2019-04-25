@@ -197,6 +197,28 @@ namespace Bangazon.Controllers
             return View(order);
         }
 
+        [HttpPost, ActionName("RemoveProductFromOrder")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProductConfirmed(int id)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            var orderProducts = _context.OrderProduct;
+            foreach (OrderProduct item in orderProducts)
+            {
+                if (item.ProductId == id)
+                {
+                    orderProducts.Remove(item);
+                }
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Cart));
+        }
+
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
