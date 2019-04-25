@@ -109,6 +109,8 @@ namespace Bangazon.Controllers
             return View(order);
         }
 
+      
+
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -174,6 +176,24 @@ namespace Bangazon.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            return View(order);
+        }
+
+        public async Task<IActionResult> RemoveProductFromOrder(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.OrderProduct
+                .Include(o => o.Product)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
             return View(order);
         }
 
