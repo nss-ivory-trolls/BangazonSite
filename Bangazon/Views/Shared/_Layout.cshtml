@@ -44,6 +44,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <form asp-controller="Home" asp-action="IndexSearch">
+                                <p>
+                                    Search By Title: <input type="text" name="SearchString">
+                                    <input type="submit" value="Search" />
+                                </p>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>
