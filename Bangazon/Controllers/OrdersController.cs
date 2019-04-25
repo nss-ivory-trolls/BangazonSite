@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Bangazon.Data;
 using Bangazon.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Bangazon.Controllers
 {
@@ -186,6 +187,8 @@ namespace Bangazon.Controllers
 
             var order = await _context.Order
                 .Include(o => o.PaymentType)
+                .Include(o => o.OrderProducts)
+                .ThenInclude(o => o.Product)
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (order == null)
@@ -201,8 +204,26 @@ namespace Bangazon.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userid = user.Id;
             var order = await _context.Order.FindAsync(id);
+            var orderProducts = _context.OrderProduct;
+            foreach (OrderProduct item in orderProducts)
+            {
+                if (item.OrderId == order.OrderId && userid == order.UserId)
+                {
+                    orderProducts.Remove(item);
+                }
+            }
+
+            if (userid == order.UserId)
+            {
             _context.Order.Remove(order);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
