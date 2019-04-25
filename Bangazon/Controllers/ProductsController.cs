@@ -10,6 +10,7 @@ using Bangazon.Models.ProductViewModels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using System;
 
 namespace Bangazon.Controllers
 
@@ -26,6 +27,8 @@ namespace Bangazon.Controllers
             _userManager = userManager;
             _context = ctx;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Products
         public async Task<IActionResult> Index(string Ptype)
@@ -48,6 +51,23 @@ namespace Bangazon.Controllers
                 }).ToListAsync();
 
             return View(model);
+        }
+
+        // GET: User's Products for Sale
+        public async Task<IActionResult> UserIndex()
+        {
+            var user = await GetCurrentUserAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userid = user.Id;
+            var applicationDbContext = _context.Product
+                .Include(p => p.ProductType)
+                .Include(p => p.User)
+                .Where(p => p.UserId == userid);
+
+            return View(await applicationDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> Details(int? id)
