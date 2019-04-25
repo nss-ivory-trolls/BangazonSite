@@ -217,6 +217,13 @@ namespace Bangazon.Controllers
                 }
             }
             await _context.SaveChangesAsync();
+
+            var restockProduct = await _context.Product
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            restockProduct.Quantity = restockProduct.Quantity + 1;
+            _context.Update(restockProduct);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Cart));
         }
 
@@ -255,12 +262,16 @@ namespace Bangazon.Controllers
             var userid = user.Id;
             var order = await _context.Order.FindAsync(id);
             var orderProducts = _context.OrderProduct;
+            var products = _context.Product;
+
+           
+
             foreach (OrderProduct item in orderProducts)
             {
                 if (item.OrderId == order.OrderId && userid == order.UserId)
                 {
                     orderProducts.Remove(item);
-                }
+                };
             }
 
             if (userid == order.UserId)
@@ -292,6 +303,11 @@ namespace Bangazon.Controllers
                 orderProduct.OrderId = order.OrderId;
                 _context.Add(orderProduct);
                 await _context.SaveChangesAsync();
+
+                var reduceProduct = await _context.Product
+                    .FirstOrDefaultAsync(m => m.ProductId == id);
+                reduceProduct.Quantity = reduceProduct.Quantity - 1;
+                _context.Update(reduceProduct);
             }
             else
             {
@@ -299,6 +315,12 @@ namespace Bangazon.Controllers
                 orderProduct.ProductId = productToAdd.ProductId;
                 orderProduct.OrderId = openOrder.OrderId;
                 _context.Add(orderProduct);
+                await _context.SaveChangesAsync();
+
+                var reduceProduct = await _context.Product
+                    .FirstOrDefaultAsync(m => m.ProductId == id);
+                reduceProduct.Quantity = reduceProduct.Quantity - 1;
+                _context.Update(reduceProduct);
                 await _context.SaveChangesAsync();
             }
 
