@@ -7,6 +7,12 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
 </div>
+<form asp-controller="Home" asp-action="IndexSearchCity">
+    <p>
+        Search by City: <input type="text" name="SearchString">
+        <input type="submit" value="Search" />
+    </p>
+</form>
 
 <div>
     <h4>Most Recent Products</h4>
@@ -14,13 +20,13 @@
     <ul>
         @foreach (var item in Model)
         {
-        <li>
-            @Html.ActionLink(linkText: item.Title, 
-                actionName: "Details",
-                controllerName: "Products", 
-                routeValues: new { id = item.ProductId }, 
-                htmlAttributes: null)
-        </li>
+            <li>
+                @Html.ActionLink(linkText: item.Title,
+                    actionName: "Details",
+                    controllerName: "Products",
+                    routeValues: new { id = item.ProductId },
+                    htmlAttributes: null)
+            </li>
         }
     </ul>
 </div>

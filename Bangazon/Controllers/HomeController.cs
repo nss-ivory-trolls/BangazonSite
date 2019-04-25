@@ -19,6 +19,33 @@ namespace Bangazon.Controllers
             _context = ctx;
         }
 
+        public ViewResult IndexSearch(string searchString)
+        {
+            var Product = from p in _context.Product
+                          select p;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                Product = _context.Product.Where(p => p.Title.Contains(searchString));
+            }
+
+            return View(Product.ToList());
+        }
+
+        public ViewResult IndexSearchCity(string searchString)
+        {
+            var Product = from p in _context.Product
+                          select p;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                Product = _context.Product.Where(p => p.City.Contains(searchString));
+            }
+
+            return View(Product.ToList());
+        }
+
+
+
+
         public async Task<IActionResult> Index()
         {
             var list = (from p in _context.Product
