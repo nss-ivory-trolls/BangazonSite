@@ -292,6 +292,11 @@ namespace Bangazon.Controllers
                 orderProduct.OrderId = order.OrderId;
                 _context.Add(orderProduct);
                 await _context.SaveChangesAsync();
+
+                //var reduceProduct = await _context.Product
+                //    .FirstOrDefaultAsync(m => m.ProductId == id);
+                //reduceProduct.Quantity = reduceProduct.Quantity - 1;
+                //_context.Update(reduceProduct);
             }
             else
             {
@@ -299,6 +304,12 @@ namespace Bangazon.Controllers
                 orderProduct.ProductId = productToAdd.ProductId;
                 orderProduct.OrderId = openOrder.OrderId;
                 _context.Add(orderProduct);
+                await _context.SaveChangesAsync();
+
+                var reduceProduct = await _context.Product
+                    .FirstOrDefaultAsync(m => m.ProductId == id);
+                reduceProduct.Quantity = reduceProduct.Quantity - 1;
+                _context.Update(reduceProduct);
                 await _context.SaveChangesAsync();
             }
 
